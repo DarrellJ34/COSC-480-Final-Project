@@ -1,0 +1,9 @@
+yfinance
+pandas
+pyarrow
+lxml
+requests
+python-dotenv
+numpy
+torch
+scikit-learn

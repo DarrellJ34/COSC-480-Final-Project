@@ -1,0 +1,17 @@
+# downloaded data (regenerate with: python download_data.py)
+data/
+
+.env
+
+# python
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
+
+# experiment outputs: keep the small CSV/JSON summaries, ignore big predictions and logs
+results/*.parquet
+results/*.log
