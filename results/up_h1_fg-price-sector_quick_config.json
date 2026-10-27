@@ -1,0 +1,20 @@
+{
+  "groups": "price,sector,fg",
+  "label": "up",
+  "horizon": 1,
+  "seq_len": 120,
+  "start_year": 2010,
+  "end_year": 2025,
+  "epochs": 3,
+  "patience": 5,
+  "seeds": 1,
+  "hidden": 64,
+  "dropout": 0.3,
+  "lr": 0.001,
+  "batch_size": 128,
+  "shuffle_labels": false,
+  "quick": true,
+  "rebuild_features": false,
+  "verbose": false,
+  "name": null
+}

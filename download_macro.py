@@ -34,8 +34,10 @@ FRED_SERIES = {
     "DTB6":         "tbill_6m",
     "T10Y2Y":       "curve_10y_2y",          # yield-curve slopes
     "T10Y3M":       "curve_10y_3m",
-    "BAMLH0A0HYM2": "hy_spread",             # ICE BofA US high-yield option-adjusted spread
-    "BAMLC0A0CM":   "ig_spread",             # ICE BofA US investment-grade spread
+    "BAMLH0A0HYM2": "hy_spread",             # ICE BofA US high-yield option-adjusted spread (FRED only serves ~3 years)
+    "BAMLC0A0CM":   "ig_spread",             # ICE BofA US investment-grade spread (same limit)
+    "DBAA":         "moody_baa",             # Moody's Baa corporate yield, daily since 1986: full history, unlike the ICE series
+    "DAAA":         "moody_aaa",             # Moody's Aaa corporate yield; Baa - Aaa = credit stress for the fear/greed index
     "T10YIE":       "breakeven_10y",         # 10y breakeven inflation
     "DFII10":       "real_10y",              # 10y TIPS real yield
     "DTWEXBGS":     "dollar_broad",          # trade-weighted broad dollar index (2006+)

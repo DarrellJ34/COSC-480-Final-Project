@@ -4,6 +4,7 @@ Walk-forward experiment on real data.
   python run_experiment.py                         # price + sector, test years 2010-2025, 1 seed
   python run_experiment.py --quick                 # pipeline check: 150 tickers, 3 test years, 3 epochs
   python run_experiment.py --groups price,sector,macro --seeds 5
+  python run_experiment.py --groups price,sector,fg    # + homemade fear/greed index (python fear_greed.py first)
   python run_experiment.py --shuffle-labels        # leakage check: every year's AUC should be ~0.5
   python run_experiment.py --label vs_spy          # "beats SPY" label
   python run_experiment.py --horizon 3             # 3-month horizon (purge grows to match)
@@ -29,6 +30,7 @@ import begin as M
 from labels import build_samples
 from features import build_daily_features, FEATURE_COLS
 from dataset import WindowDataset, make_loader, walk_forward_split, sector_one_hot, macro_static
+from fear_greed import fg_static
 
 DATA, RESULTS = Path("data"), Path("results")
 sys.stdout.reconfigure(line_buffering=True)   # so progress shows up live even when piped to a log
@@ -53,7 +55,7 @@ def load_features(prices, tickers_df, rebuild=False):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--groups", default="price,sector", help="comma list from: price, sector, macro")
+    ap.add_argument("--groups", default="price,sector", help="comma list from: price, sector, macro, fg (fear/greed)")
     ap.add_argument("--label", default="up", choices=["up", "vs_spy"])
     ap.add_argument("--horizon", type=int, default=1, help="label horizon in months")
     ap.add_argument("--seq-len", type=int, default=120)
@@ -106,6 +108,12 @@ def main():
         mat, names = sector_one_hot(samples, tickers_df); static_parts.append(mat); static_names += names
     if "macro" in groups:
         mat, names = macro_static(samples, pd.read_parquet(DATA / "macro.parquet"))
+        static_parts.append(mat); static_names += names
+    if "fg" in groups:
+        fg_path = DATA / "fear_greed_daily.parquet"
+        if not fg_path.exists():
+            raise SystemExit("fear/greed group needs data/fear_greed_daily.parquet: run `python fear_greed.py` first")
+        mat, names = fg_static(samples, pd.read_parquet(fg_path))
         static_parts.append(mat); static_names += names
     static = np.concatenate(static_parts, axis=1) if static_parts else np.zeros((len(samples), 0), np.float32)
 
